@@ -1,4 +1,6 @@
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
@@ -21,5 +23,16 @@ public class LogProducer {
         props.setProperty("bootstrap.servers", "172.31.74.41:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+        ProducerRecord<String, String> record = new ProducerRecord<>(topicName, value);
+        producer = new KafkaProducer<>(props);
+        producer.send(record);
+        producer.close();
+
+        System.out.println("Send record");
+    }
+
+    public static void main(String[] args) throws Exception {
+        LogProducer testProducer = new LogProducer();
     }
 }
