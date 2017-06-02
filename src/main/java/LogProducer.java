@@ -3,33 +3,51 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by John on 5/28/17.
  */
 public class LogProducer {
-    private String topicName = "test";
-    private String value = "hello from my custom producer";
-    private Producer<String, String> producer;
+    private static String topicName = "test";
+    private static Producer<String, String> producer;
+    private static Random r = new Random();
 
     private Properties props;
 
     public LogProducer() {
-        topicName = "test";
-        value = "hello from my custom producer";
 
         props = new Properties();
-        props.setProperty("bootstrap.servers", "172.31.74.41:9092");
+        props.setProperty("bootstrap.servers", "0.0.0.0:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-
-        ProducerRecord<String, String> record = new ProducerRecord<>(topicName, value);
+        
         producer = new KafkaProducer<>(props);
-        producer.send(record);
-        producer.close();
+        
+        Random r = new Random();
 
-        System.out.println("Send record");
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(LogProducer::sendMessage,0,1, TimeUnit.MILLISECONDS);
+        //producer.close();
+    }
+
+    private static void sendMessage(){
+        producer.send(new ProducerRecord<>(topicName, generateIp()));
+    }
+
+    private static String generateIp() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(r.nextInt(256) + "." + r.nextInt(256) + "." + r.nextInt(256) + "." + r.nextInt(256));
+        builder.append(" - - [");
+        builder.append(LocalDateTime.now().minusSeconds(1).format(DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss")));
+        builder.append("] GET / HTTP/1.0 200 1783");
+        return builder.toString();
     }
 
     public static void main(String[] args) throws Exception {
