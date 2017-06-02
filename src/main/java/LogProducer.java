@@ -21,10 +21,10 @@ public class LogProducer {
 
     private Properties props;
 
-    public LogProducer() {
+    public LogProducer(String bootstrapServers) {
 
         props = new Properties();
-        props.setProperty("bootstrap.servers", "0.0.0.0:9092");
+        props.setProperty("bootstrap.servers", bootstrapServers);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         
@@ -51,6 +51,14 @@ public class LogProducer {
     }
 
     public static void main(String[] args) throws Exception {
-        LogProducer testProducer = new LogProducer();
+        String bootstrapServers;
+        if(args.length == 0) {
+            bootstrapServers = "0.0.0.0:9292";
+        }else{
+            bootstrapServers = args[0];
+        }
+
+        LogProducer testProducer = new LogProducer(bootstrapServers);
+
     }
 }
