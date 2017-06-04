@@ -1,3 +1,7 @@
+package producer;
+
+import producer.AbstractProducer;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;

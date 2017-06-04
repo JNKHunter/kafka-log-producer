@@ -1,3 +1,5 @@
+import producer.TypicalProducer;
+
 import java.util.concurrent.TimeUnit;
 
 /**
