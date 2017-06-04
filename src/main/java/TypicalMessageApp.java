@@ -10,13 +10,13 @@ public class TypicalMessageApp {
         String bootstrapServers;
         String topic;
         if(args.length == 0) {
-            bootstrapServers = "0.0.0.0:9292";
+            bootstrapServers = "0.0.0.0:9092";
             topic = "test";
         }else{
             bootstrapServers = args[0];
             topic = args[1];
         }
 
-        Producer<TypicalMessageGenerator> producer = new Producer<TypicalMessageGenerator>(bootstrapServers, topic);
+        TypicalProducer producer = new TypicalProducer(bootstrapServers, topic);
     }
 }

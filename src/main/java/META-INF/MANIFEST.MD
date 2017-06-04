@@ -1,2 +1,2 @@
 Manifest-version: 1.0
-Main-Class: Producer
+Main-Class: TypicalMessageApp

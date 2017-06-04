@@ -5,12 +5,16 @@ import java.util.Random;
 /**
  * Created by John on 6/3/17.
  */
-public class TypicalMessageGenerator implements MessageGenerator {
+public class TypicalProducer extends AbstractProducer {
 
     private Random random = new Random();
 
+    public TypicalProducer(String bootstrapServers, String topicName) {
+        super(bootstrapServers, topicName);
+    }
+
     @Override
-    public String generate() {
+    String generate() {
         StringBuilder builder = new StringBuilder();
         builder.append(random.nextInt(256) + "." + random.nextInt(256) + "." + random.nextInt(256) + "." + random.nextInt(256));
         builder.append(" - - [");
