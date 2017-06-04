@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by John on 5/28/17.
+ * TODO: Generation should not be the concern of this class.
+ * Possibly break the generation functionality out to another class.
  */
 public abstract class AbstractProducer {
     private String topicName;
