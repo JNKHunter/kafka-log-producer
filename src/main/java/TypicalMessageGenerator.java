@@ -11,7 +11,6 @@ public class TypicalMessageGenerator implements MessageGenerator {
 
     @Override
     public String generate() {
-        
         StringBuilder builder = new StringBuilder();
         builder.append(random.nextInt(256) + "." + random.nextInt(256) + "." + random.nextInt(256) + "." + random.nextInt(256));
         builder.append(" - - [");
