@@ -1,3 +1,4 @@
+import producer.DDosProducer;
 import producer.TypicalProducer;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +22,10 @@ public class TypicalMessageApp {
             topic = args[1];
         }
 
-        TypicalProducer producer = new TypicalProducer(bootstrapServers, topic,
-                0, 1, TimeUnit.MILLISECONDS);
+        /*TypicalProducer producer = new TypicalProducer(bootstrapServers, topic,
+                0, 1, TimeUnit.MILLISECONDS);*/
+
+        DDosProducer producer = new DDosProducer(bootstrapServers, topic,
+                0,1,TimeUnit.MILLISECONDS);
     }
 }

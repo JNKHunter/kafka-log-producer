@@ -18,9 +18,12 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractProducer {
     private String topicName;
+    private String bootstrapServers;
+    private int initialDelay;
+    private int period;
+    private TimeUnit timeUnit;
     private org.apache.kafka.clients.producer.Producer<String, String> producer;
     private Properties props;
-    private Random r = new Random();
     private Runnable runnable;
 
     /**
@@ -32,12 +35,29 @@ public abstract class AbstractProducer {
      */
     public AbstractProducer(String bootstrapServers, String topicName,
                             int initialDelay, int period, TimeUnit timeUnit) {
+
         this.topicName = topicName;
+        this.bootstrapServers = bootstrapServers;
+        this.initialDelay = initialDelay;
+        this.timeUnit = timeUnit;
+        this.period = period;
+
+        init();
+
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(this.runnable,this.initialDelay,this.period, this.timeUnit);
+    }
+
+    protected abstract String generate();
+
+    /** Hook for making any initializations before we run the executor. Override as needed. **/
+    protected void init(){
+
         props = new Properties();
         props.setProperty("bootstrap.servers", bootstrapServers);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        
+
         producer = new KafkaProducer<>(props);
 
         runnable = new Runnable() {
@@ -46,12 +66,7 @@ public abstract class AbstractProducer {
                 producer.send(new ProducerRecord(topicName, generate()));
             }
         };
-
-        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(runnable,initialDelay,period, timeUnit);
-    }
-
-    abstract String generate();
+    };
 
     public void closeProducer() {
         producer.close();

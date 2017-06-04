@@ -20,7 +20,7 @@ public class TypicalProducer extends AbstractProducer {
     }
 
     @Override
-    String generate() {
+    protected String generate() {
         StringBuilder builder = new StringBuilder();
         builder.append(random.nextInt(256) + "." +
                 random.nextInt(256) + "." +
