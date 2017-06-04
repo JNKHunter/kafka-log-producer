@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
  * App takes two command line args.
  * arg[0]: address and port # of Kafka bootstrapServers
  * arg[1]: topic name to send messages to
- *
  */
 public class TypicalMessageApp {
     public static void main(String[] args) {
@@ -20,7 +19,7 @@ public class TypicalMessageApp {
         if(args.length == 0) {
             bootstrapServers = "0.0.0.0:9092";
             topic = "test";
-            type = "normal";
+            type = "ddos";
         }else{
             bootstrapServers = args[0];
             topic = args[1];
@@ -32,7 +31,7 @@ public class TypicalMessageApp {
                     0, 1, TimeUnit.MILLISECONDS);
         } else {
             DDosProducer ddosProducer = new DDosProducer(bootstrapServers, topic,
-                    0,1,TimeUnit.MILLISECONDS);
+                    0,500,TimeUnit.MILLISECONDS);
         }
     }
 }

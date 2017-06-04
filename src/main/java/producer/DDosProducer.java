@@ -13,8 +13,9 @@ import java.util.concurrent.TimeUnit;
 public class DDosProducer extends AbstractProducer {
 
     private Random random;
-    private int numberOfZombies = 100;
+    private int numberOfZombies;
     private List<String> botnetIps;
+    private Long count;
 
     public DDosProducer(String bootstrapServers, String topicName,
                            int initialDelay, int period, TimeUnit timeUnit) {
@@ -25,10 +26,12 @@ public class DDosProducer extends AbstractProducer {
     @Override
     protected void init(){
         super.init();
+        numberOfZombies = 100;
         botnetIps = new ArrayList<>();
         random = new Random();
+        count = 1L;
         // Generate a number of botnet zombies
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < numberOfZombies; i++) {
             StringBuilder builder = new StringBuilder();
             builder.append(random.nextInt(256) + "." +
                     random.nextInt(256) + "." +
@@ -42,14 +45,23 @@ public class DDosProducer extends AbstractProducer {
     @Override
     protected String generate() {
         StringBuilder builder = new StringBuilder();
-        //Choose a ip randomly from the zombie list
-        builder.append(botnetIps.get(random.nextInt(100)));
+        if(count % numberOfZombies == 0) {
+            //Create a random IP simulating a normal request.
+            builder.append(random.nextInt(256) + "." +
+                    random.nextInt(256) + "." +
+                    random.nextInt(256) + "." +
+                    random.nextInt(256));
+        } else {
+            //Choose a ip randomly from the zombie list
+            builder.append("BOT " + botnetIps.get(random.nextInt(100)));
+        }
+
+
         builder.append(" - - [");
         builder.append(LocalDateTime.now().minusSeconds(1)
                 .format(DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss")));
         builder.append("] GET / HTTP/1.0 200 1783");
+        count += 1;
         return builder.toString();
     }
-
-
 }
