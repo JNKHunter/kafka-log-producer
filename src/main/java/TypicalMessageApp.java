@@ -1,3 +1,5 @@
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by John on 6/3/17.
  * App takes two command line args.
@@ -17,6 +19,7 @@ public class TypicalMessageApp {
             topic = args[1];
         }
 
-        TypicalProducer producer = new TypicalProducer(bootstrapServers, topic);
+        TypicalProducer producer = new TypicalProducer(bootstrapServers, topic,
+                0, 1, TimeUnit.MILLISECONDS);
     }
 }

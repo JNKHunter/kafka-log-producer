@@ -19,7 +19,15 @@ public abstract class AbstractProducer {
     private Random r = new Random();
     private Runnable runnable;
 
-    public AbstractProducer(String bootstrapServers, String topicName) {
+    /**
+     * String bootstrapServers: ip and port number of kafka brokers
+     * String topicName: kafka topic name to publish to
+     * int initialDelay: amount of time to wait before starting producer
+     * int period: number of time units between record production
+     * TimeUnit timeUnit: unit of time (seconds, milliseconds etc)
+     */
+    public AbstractProducer(String bootstrapServers, String topicName,
+                            int initialDelay, int period, TimeUnit timeUnit) {
         this.topicName = topicName;
         props = new Properties();
         props.setProperty("bootstrap.servers", bootstrapServers);
@@ -36,7 +44,7 @@ public abstract class AbstractProducer {
         };
 
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(runnable,0,1, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(runnable,initialDelay,period, timeUnit);
     }
 
     abstract String generate();
