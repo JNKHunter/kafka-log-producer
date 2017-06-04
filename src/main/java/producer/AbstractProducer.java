@@ -43,12 +43,15 @@ public abstract class AbstractProducer {
         this.period = period;
 
         init();
-
-        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(this.runnable,this.initialDelay,this.period, this.timeUnit);
+        startExecutors();
     }
 
     protected abstract String generate();
+
+    protected void startExecutors(){
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(this.runnable,this.initialDelay,this.period, this.timeUnit);
+    }
 
     /** Hook for making any initializations before we run the executor. Override as needed. **/
     protected void init(){

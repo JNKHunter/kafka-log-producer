@@ -31,7 +31,7 @@ public class TypicalMessageApp {
                     0, 1, TimeUnit.MILLISECONDS);
         } else {
             DDosProducer ddosProducer = new DDosProducer(bootstrapServers, topic,
-                    0,500,TimeUnit.MILLISECONDS);
+                    0,1, TimeUnit.MILLISECONDS);
         }
     }
 }
