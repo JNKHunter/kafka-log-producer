@@ -42,7 +42,7 @@ public class DDosProducer extends AbstractProducer {
     @Override
     protected String generate() {
         StringBuilder builder = new StringBuilder();
-        //Choose an ip randomly from the zombie list
+        //Choose a ip randomly from the zombie list
         builder.append(botnetIps.get(random.nextInt(100)));
         builder.append(" - - [");
         builder.append(LocalDateTime.now().minusSeconds(1)

@@ -1,5 +1,5 @@
 import producer.DDosProducer;
-import producer.TypicalProducer;
+import producer.NormalProducer;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,18 +14,25 @@ public class TypicalMessageApp {
     public static void main(String[] args) {
         String bootstrapServers;
         String topic;
+        //"normal" or "ddos". Will add proper DI, but this will do for now.
+        String type;
+
         if(args.length == 0) {
             bootstrapServers = "0.0.0.0:9092";
             topic = "test";
+            type = "normal";
         }else{
             bootstrapServers = args[0];
             topic = args[1];
+            type = args[2];
         }
-
-        /*TypicalProducer producer = new TypicalProducer(bootstrapServers, topic,
-                0, 1, TimeUnit.MILLISECONDS);*/
-
-        DDosProducer producer = new DDosProducer(bootstrapServers, topic,
-                0,1,TimeUnit.MILLISECONDS);
+        
+        if(type.equals("normal")) {
+            NormalProducer producer = new NormalProducer(bootstrapServers, topic,
+                    0, 1, TimeUnit.MILLISECONDS);
+        } else {
+            DDosProducer ddosProducer = new DDosProducer(bootstrapServers, topic,
+                    0,1,TimeUnit.MILLISECONDS);
+        }
     }
 }
