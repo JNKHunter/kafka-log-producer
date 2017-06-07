@@ -5,6 +5,8 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -25,6 +27,8 @@ public abstract class AbstractProducer {
     private org.apache.kafka.clients.producer.Producer<String, String> producer;
     private Properties props;
     private Runnable runnable;
+    protected Random random;
+    protected List<Integer> hostsIds;
 
     /**
      * String bootstrapServers: ip and port number of kafka brokers
@@ -41,6 +45,12 @@ public abstract class AbstractProducer {
         this.initialDelay = initialDelay;
         this.timeUnit = timeUnit;
         this.period = period;
+        this.hostsIds = new ArrayList<>();
+
+        this.hostsIds.add(1);
+        this.hostsIds.add(2);
+        this.hostsIds.add(3);
+        this.hostsIds.add(4);
 
         init();
         startExecutors();
@@ -55,7 +65,7 @@ public abstract class AbstractProducer {
 
     /** Hook for making any initializations before we run the executor. Override as needed. **/
     protected void init(){
-
+        random = new Random();
         props = new Properties();
         props.setProperty("bootstrap.servers", bootstrapServers);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -70,6 +80,17 @@ public abstract class AbstractProducer {
             }
         };
     };
+
+    protected String getRandomIp() {
+        return random.nextInt(256) + "." +
+                random.nextInt(256) + "." +
+                random.nextInt(256) + "." +
+                random.nextInt(256);
+    }
+
+    protected int getRandomHost() {
+        return hostsIds.get(random.nextInt(4));
+    }
 
     public void closeProducer() {
         producer.close();

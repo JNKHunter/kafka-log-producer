@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DDosProducer extends AbstractProducer {
 
-    private Random random;
+
     private int numberOfZombies;
     private List<String> botnetIps;
     private Long count;
@@ -28,40 +28,24 @@ public class DDosProducer extends AbstractProducer {
         super.init();
         numberOfZombies = 100;
         botnetIps = new ArrayList<>();
-        random = new Random();
         count = 1L;
         // Generate a number of botnet zombies
         for(int i = 0; i < numberOfZombies; i++) {
             StringBuilder builder = new StringBuilder();
-            builder.append(random.nextInt(256) + "." +
-                    random.nextInt(256) + "." +
-                    random.nextInt(256) + "." +
-                    random.nextInt(256));
-
+            builder.append(getRandomIp());
             botnetIps.add(builder.toString());
         }
     }
 
     @Override
     protected String generate() {
-        StringBuilder builder = new StringBuilder();
+        count += 1;
         if(count % numberOfZombies == 0) {
             //Create a random IP simulating a normal request.
-            builder.append(random.nextInt(256) + "." +
-                    random.nextInt(256) + "." +
-                    random.nextInt(256) + "." +
-                    random.nextInt(256));
+            return getRandomHost() + "," + getRandomIp();
         } else {
             //Choose a ip randomly from the zombie list
-            builder.append("BOT " + botnetIps.get(random.nextInt(100)));
+            return hostsIds.get(0) + "," + botnetIps.get(random.nextInt(numberOfZombies));
         }
-
-
-        builder.append(" - - [");
-        builder.append(LocalDateTime.now().minusSeconds(1)
-                .format(DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss")));
-        builder.append("] GET / HTTP/1.0 200 1783");
-        count += 1;
-        return builder.toString();
     }
 }
