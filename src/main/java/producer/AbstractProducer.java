@@ -3,8 +3,6 @@ package producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -56,7 +54,7 @@ public abstract class AbstractProducer {
         startExecutors();
     }
 
-    protected abstract String generate();
+    protected abstract String generateValue();
 
     protected void startExecutors(){
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -76,7 +74,7 @@ public abstract class AbstractProducer {
         runnable = new Runnable() {
             @Override
             public void run() {
-                producer.send(new ProducerRecord(topicName, generate()));
+                producer.send(new ProducerRecord(topicName, generateValue()));
             }
         };
     };

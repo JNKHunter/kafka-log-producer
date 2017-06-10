@@ -38,7 +38,7 @@ public class DDosProducer extends AbstractProducer {
     }
 
     @Override
-    protected String generate() {
+    protected String generateValue() {
         count += 1;
         if(count % numberOfZombies == 0) {
             //Create a random IP simulating a normal request.

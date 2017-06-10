@@ -18,8 +18,8 @@ public class TypicalMessageApp {
 
         if(args.length == 0) {
             bootstrapServers = "0.0.0.0:9092";
-            topic = "test";
-            type = "ddos";
+            topic = "logs";
+            type = "normal";
         }else{
             bootstrapServers = args[0];
             topic = args[1];
@@ -28,10 +28,10 @@ public class TypicalMessageApp {
         
         if(type.equals("normal")) {
             NormalProducer producer = new NormalProducer(bootstrapServers, topic,
-                    0, 50, TimeUnit.MILLISECONDS);
+                    0, 1, TimeUnit.MICROSECONDS);
         } else {
             DDosProducer ddosProducer = new DDosProducer(bootstrapServers, topic,
-                    0,50, TimeUnit.MILLISECONDS);
+                    0,1, TimeUnit.MICROSECONDS);
         }
     }
 }
