@@ -27,6 +27,8 @@ public abstract class AbstractProducer {
     private Runnable runnable;
     protected Random random;
     protected List<String> hostsIds;
+    protected String curKey;
+    protected String curVal;
 
     /**
      * String bootstrapServers: ip and port number of kafka brokers
@@ -53,8 +55,8 @@ public abstract class AbstractProducer {
         init();
         startExecutors();
     }
-
-    protected abstract String generateValue();
+    
+    protected abstract void generateKeyPair();
 
     protected void startExecutors(){
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -74,7 +76,8 @@ public abstract class AbstractProducer {
         runnable = new Runnable() {
             @Override
             public void run() {
-                producer.send(new ProducerRecord(topicName, generateValue()));
+                generateKeyPair();
+                producer.send(new ProducerRecord(topicName, curKey, curKey + "," + curVal ));
             }
         };
     };

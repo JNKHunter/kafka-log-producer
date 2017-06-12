@@ -20,11 +20,8 @@ public class NormalProducer extends AbstractProducer {
     }
 
     @Override
-    protected String generateValue() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(getRandomHost());
-        builder.append(",");
-        builder.append(getRandomIp());
-        return builder.toString();
+    protected void generateKeyPair() {
+        curKey = getRandomHost();
+        curVal = getRandomIp();
     }
 }

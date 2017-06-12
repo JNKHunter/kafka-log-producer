@@ -17,6 +17,7 @@ public class DDosProducer extends AbstractProducer {
     private List<String> botnetIps;
     private Long count;
 
+
     public DDosProducer(String bootstrapServers, String topicName,
                            int initialDelay, int period, TimeUnit timeUnit) {
         super(bootstrapServers, topicName, initialDelay, period, timeUnit);
@@ -38,14 +39,18 @@ public class DDosProducer extends AbstractProducer {
     }
 
     @Override
-    protected String generateValue() {
+    protected void generateKeyPair() {
         count += 1;
         if(count % numberOfZombies == 0) {
             //Create a random IP simulating a normal request.
-            return getRandomHost() + "," + getRandomIp();
+            curKey = getRandomHost();
+            curVal =  getRandomIp();
         } else {
+            //First host is getting ddos'd
+            curKey = hostsIds.get(0);
             //Choose a ip randomly from the zombie list
-            return hostsIds.get(0) + "," + botnetIps.get(random.nextInt(numberOfZombies));
+            curVal = botnetIps.get(random.nextInt(numberOfZombies));
         }
     }
+
 }
