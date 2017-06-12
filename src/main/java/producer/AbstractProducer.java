@@ -26,7 +26,7 @@ public abstract class AbstractProducer {
     private Properties props;
     private Runnable runnable;
     protected Random random;
-    protected List<Integer> hostsIds;
+    protected List<String> hostsIds;
 
     /**
      * String bootstrapServers: ip and port number of kafka brokers
@@ -45,10 +45,10 @@ public abstract class AbstractProducer {
         this.period = period;
         this.hostsIds = new ArrayList<>();
 
-        this.hostsIds.add(1);
-        this.hostsIds.add(2);
-        this.hostsIds.add(3);
-        this.hostsIds.add(4);
+        this.hostsIds.add("1");
+        this.hostsIds.add("2");
+        this.hostsIds.add("3");
+        this.hostsIds.add("4");
 
         init();
         startExecutors();
@@ -86,7 +86,7 @@ public abstract class AbstractProducer {
                 random.nextInt(256);
     }
 
-    protected int getRandomHost() {
+    protected String getRandomHost() {
         return hostsIds.get(random.nextInt(4));
     }
 
