@@ -58,6 +58,18 @@ public abstract class AbstractProducer {
     
     protected abstract void generateKeyPair();
 
+    public String getCurKey() {
+        return curKey;
+    }
+
+    public String getCurVal() {
+        return curVal;
+    }
+
+    public String getKeyValPair() {
+        return curKey + "," + curVal;
+    }
+
     protected void startExecutors(){
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(this.runnable,this.initialDelay,this.period, this.timeUnit);
@@ -77,7 +89,7 @@ public abstract class AbstractProducer {
             @Override
             public void run() {
                 generateKeyPair();
-                producer.send(new ProducerRecord(topicName, curKey, curKey + "," + curVal ));
+                producer.send(new ProducerRecord(topicName, curKey, curKey + "," + getKeyValPair() ));
             }
         };
     };
