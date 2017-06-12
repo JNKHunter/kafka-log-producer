@@ -91,8 +91,10 @@ public abstract class AbstractProducer {
             @Override
             public void run() {
                 generateKeyPair();
-                producer.send(new ProducerRecord(topicName, curKey % NUM_OF_PARTITIONS,
-                        curKey, curKey + "," + getKeyValPair() ));
+                producer.send(new ProducerRecord<String, String>(topicName,
+                        curKey % NUM_OF_PARTITIONS,
+                        Integer.toString(curKey),
+                        curKey + "," + getKeyValPair() ));
             }
         };
     };
