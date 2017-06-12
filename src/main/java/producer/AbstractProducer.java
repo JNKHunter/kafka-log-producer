@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
  * Possibly break the generation functionality out to another class.
  */
 public abstract class AbstractProducer {
+    private int NUM_OF_PARTITIONS = 2;
+
     private String topicName;
     private String bootstrapServers;
     private int initialDelay;
@@ -26,8 +28,8 @@ public abstract class AbstractProducer {
     private Properties props;
     private Runnable runnable;
     protected Random random;
-    protected List<String> hostsIds;
-    protected String curKey;
+    protected List<Integer> hostsIds;
+    protected int curKey;
     protected String curVal;
 
     /**
@@ -47,10 +49,10 @@ public abstract class AbstractProducer {
         this.period = period;
         this.hostsIds = new ArrayList<>();
 
-        this.hostsIds.add("1");
-        this.hostsIds.add("2");
-        this.hostsIds.add("3");
-        this.hostsIds.add("4");
+        this.hostsIds.add(1);
+        this.hostsIds.add(2);
+        this.hostsIds.add(3);
+        this.hostsIds.add(4);
 
         init();
         startExecutors();
@@ -58,7 +60,7 @@ public abstract class AbstractProducer {
     
     protected abstract void generateKeyPair();
 
-    public String getCurKey() {
+    public int getCurKey() {
         return curKey;
     }
 
@@ -89,7 +91,8 @@ public abstract class AbstractProducer {
             @Override
             public void run() {
                 generateKeyPair();
-                producer.send(new ProducerRecord(topicName, curKey, curKey + "," + getKeyValPair() ));
+                producer.send(new ProducerRecord(topicName, curKey % NUM_OF_PARTITIONS,
+                        curKey, curKey + "," + getKeyValPair() ));
             }
         };
     };
@@ -101,7 +104,7 @@ public abstract class AbstractProducer {
                 random.nextInt(256);
     }
 
-    protected String getRandomHost() {
+    protected int getRandomHost() {
         return hostsIds.get(random.nextInt(4));
     }
 

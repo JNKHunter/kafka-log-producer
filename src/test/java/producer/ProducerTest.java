@@ -26,7 +26,7 @@ public class ProducerTest {
     @Test
     public void testDDosKeyValPair() {
         dDosProducer.generateKeyPair();
-        String key = dDosProducer.getCurKey();
+        int key = dDosProducer.getCurKey();
         String val = dDosProducer.getCurVal();
 
         assertEquals(key + "," + val, dDosProducer.getKeyValPair());
@@ -35,10 +35,9 @@ public class ProducerTest {
     @Test
     public void testNormalKeyValPair() {
         normalProducer.generateKeyPair();
-        String key = normalProducer.getCurKey();
+        int key = normalProducer.getCurKey();
         String val = normalProducer.getCurVal();
 
         assertEquals(key + "," + val, normalProducer.getKeyValPair());
     }
-
 }
