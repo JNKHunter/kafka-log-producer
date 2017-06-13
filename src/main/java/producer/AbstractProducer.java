@@ -93,8 +93,7 @@ public abstract class AbstractProducer {
             public void run() {
                 generateKeyPair();
                 producer.send(new ProducerRecord<String, String>(topicName,
-                        curKey % numberOfPartitions,
-                        Integer.toString(curKey),
+                        curKey % numberOfPartitions, Integer.toString(curKey),
                         getKeyValPair() ));
             }
         };
