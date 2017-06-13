@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
  * Possibly break the generation functionality out to another class.
  */
 public abstract class AbstractProducer {
-    private int NUM_OF_PARTITIONS = 2;
 
     private String topicName;
     private String bootstrapServers;
@@ -31,6 +30,7 @@ public abstract class AbstractProducer {
     protected List<Integer> hostsIds;
     protected int curKey;
     protected String curVal;
+    private int numberOfPartitions = 2;
 
     /**
      * String bootstrapServers: ip and port number of kafka brokers
@@ -40,7 +40,7 @@ public abstract class AbstractProducer {
      * TimeUnit timeUnit: unit of time (seconds, milliseconds etc)
      */
     public AbstractProducer(String bootstrapServers, String topicName,
-                            int initialDelay, int period, TimeUnit timeUnit) {
+                            int initialDelay, int period, TimeUnit timeUnit, int numberOfPartitions) {
 
         this.topicName = topicName;
         this.bootstrapServers = bootstrapServers;
@@ -48,6 +48,7 @@ public abstract class AbstractProducer {
         this.timeUnit = timeUnit;
         this.period = period;
         this.hostsIds = new ArrayList<>();
+        this.numberOfPartitions = numberOfPartitions;
 
         this.hostsIds.add(1);
         this.hostsIds.add(2);
@@ -92,9 +93,9 @@ public abstract class AbstractProducer {
             public void run() {
                 generateKeyPair();
                 producer.send(new ProducerRecord<String, String>(topicName,
-                        curKey % NUM_OF_PARTITIONS,
+                        curKey % numberOfPartitions,
                         Integer.toString(curKey),
-                        curKey + "," + getKeyValPair() ));
+                        getKeyValPair() ));
             }
         };
     };

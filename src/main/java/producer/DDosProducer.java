@@ -19,8 +19,8 @@ public class DDosProducer extends AbstractProducer {
 
 
     public DDosProducer(String bootstrapServers, String topicName,
-                           int initialDelay, int period, TimeUnit timeUnit) {
-        super(bootstrapServers, topicName, initialDelay, period, timeUnit);
+                           int initialDelay, int period, TimeUnit timeUnit, int partitions) {
+        super(bootstrapServers, topicName, initialDelay, period, timeUnit, partitions);
 
     }
 
