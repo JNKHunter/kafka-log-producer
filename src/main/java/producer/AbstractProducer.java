@@ -27,7 +27,7 @@ public abstract class AbstractProducer {
     private Properties props;
     private Runnable runnable;
     protected Random random;
-    protected int numberOfHosts = 4;
+    protected int numberOfHosts;
     protected int curKey;
     protected String curVal;
     private int numberOfPartitions = 2;
