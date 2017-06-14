@@ -15,8 +15,8 @@ public class NormalProducer extends AbstractProducer {
     private Random random = new Random();
 
     public NormalProducer(String bootstrapServers, String topicName,
-                          int initialDelay, int period, TimeUnit timeUnit, int partitions) {
-        super(bootstrapServers, topicName, initialDelay, period, timeUnit, partitions);
+                          int initialDelay, int period, TimeUnit timeUnit, int partitions, int numberOfHosts) {
+        super(bootstrapServers, topicName, initialDelay, period, timeUnit, partitions, numberOfHosts);
     }
 
     @Override

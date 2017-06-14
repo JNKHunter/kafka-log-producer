@@ -17,10 +17,10 @@ public class ProducerTest {
     @Before
     public void setUp() throws Exception {
         dDosProducer = new DDosProducer("0.0.0.0:9092", "topic",
-                0,1, TimeUnit.MICROSECONDS, 1);
+                0,1, TimeUnit.MICROSECONDS, 1, 5);
 
         normalProducer = new NormalProducer("0.0.0.0:9092", "topic",
-                0,1, TimeUnit.MICROSECONDS, 1);
+                0,1, TimeUnit.MICROSECONDS, 1, 5);
     }
 
     @Test

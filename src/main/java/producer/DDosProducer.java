@@ -1,10 +1,7 @@
 package producer;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,9 +16,8 @@ public class DDosProducer extends AbstractProducer {
 
 
     public DDosProducer(String bootstrapServers, String topicName,
-                           int initialDelay, int period, TimeUnit timeUnit, int partitions) {
-        super(bootstrapServers, topicName, initialDelay, period, timeUnit, partitions);
-
+                           int initialDelay, int period, TimeUnit timeUnit, int partitions, int numberOfHosts) {
+        super(bootstrapServers, topicName, initialDelay, period, timeUnit, partitions, numberOfHosts);
     }
 
     @Override
@@ -47,7 +43,7 @@ public class DDosProducer extends AbstractProducer {
             curVal =  getRandomIp();
         } else {
             //First host is getting ddos'd
-            curKey = hostsIds.get(0);
+            curKey = 0;
             //Choose a ip randomly from the zombie list
             curVal = botnetIps.get(random.nextInt(numberOfZombies));
         }

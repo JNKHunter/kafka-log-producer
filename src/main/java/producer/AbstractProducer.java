@@ -27,7 +27,7 @@ public abstract class AbstractProducer {
     private Properties props;
     private Runnable runnable;
     protected Random random;
-    protected List<Integer> hostsIds;
+    protected int numberOfHosts = 4;
     protected int curKey;
     protected String curVal;
     private int numberOfPartitions = 2;
@@ -40,20 +40,15 @@ public abstract class AbstractProducer {
      * TimeUnit timeUnit: unit of time (seconds, milliseconds etc)
      */
     public AbstractProducer(String bootstrapServers, String topicName,
-                            int initialDelay, int period, TimeUnit timeUnit, int numberOfPartitions) {
+                            int initialDelay, int period, TimeUnit timeUnit, int numberOfPartitions, int numberOfHosts) {
 
         this.topicName = topicName;
         this.bootstrapServers = bootstrapServers;
         this.initialDelay = initialDelay;
         this.timeUnit = timeUnit;
         this.period = period;
-        this.hostsIds = new ArrayList<>();
+        this.numberOfHosts = numberOfHosts;
         this.numberOfPartitions = numberOfPartitions;
-
-        this.hostsIds.add(1);
-        this.hostsIds.add(2);
-        this.hostsIds.add(3);
-        this.hostsIds.add(4);
 
         init();
         startExecutors();
@@ -107,7 +102,7 @@ public abstract class AbstractProducer {
     }
 
     protected int getRandomHost() {
-        return hostsIds.get(random.nextInt(4));
+        return random.nextInt(numberOfHosts);
     }
 
     public void closeProducer() {

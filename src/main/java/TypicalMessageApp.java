@@ -16,25 +16,28 @@ public class TypicalMessageApp {
         //"normal" or "ddos". Will add proper DI, but this will do for now.
         String type;
         int partitions;
+        int numberOfHosts;
 
         if(args.length == 0) {
             bootstrapServers = "0.0.0.0:9092";
             topic = "logs";
             type = "normal";
             partitions = 2;
+            numberOfHosts = 4;
         }else{
             bootstrapServers = args[0];
             topic = args[1];
             type = args[2];
             partitions = Integer.parseInt(args[3]);
+            numberOfHosts = Integer.parseInt(args[4]);
         }
         
         if(type.equals("normal")) {
             NormalProducer producer = new NormalProducer(bootstrapServers, topic,
-                    0, 50, TimeUnit.MICROSECONDS,partitions);
+                    0, 50, TimeUnit.MICROSECONDS,partitions, numberOfHosts);
         } else {
             DDosProducer ddosProducer = new DDosProducer(bootstrapServers, topic,
-                    0,50, TimeUnit.MICROSECONDS, partitions);
+                    0,50, TimeUnit.MICROSECONDS, partitions, numberOfHosts);
         }
     }
 }
