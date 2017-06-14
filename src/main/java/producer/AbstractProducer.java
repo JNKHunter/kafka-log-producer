@@ -31,6 +31,10 @@ public abstract class AbstractProducer {
     protected int curKey;
     protected String curVal;
     private int numberOfPartitions = 2;
+    private long counter = 0;
+    /*Used for shifting to the next partition. This will help load balance partitions and greatly reduce shuffling
+     */
+    private long shift = 10000;
 
     /**
      * String bootstrapServers: ip and port number of kafka brokers
@@ -83,14 +87,13 @@ public abstract class AbstractProducer {
 
         producer = new KafkaProducer<>(props);
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                generateKeyPair();
-                producer.send(new ProducerRecord<String, String>(topicName,
-                        curKey % numberOfPartitions, Integer.toString(curKey),
-                        getKeyValPair() ));
-            }
+        runnable = () -> {
+            counter += 1;
+
+            generateKeyPair();
+            producer.send(new ProducerRecord<String, String>(topicName,
+                    curKey % numberOfPartitions, Integer.toString(curKey),
+                    getKeyValPair() ));
         };
     };
 

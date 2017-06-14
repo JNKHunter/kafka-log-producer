@@ -34,10 +34,10 @@ public class TypicalMessageApp {
         
         if(type.equals("normal")) {
             NormalProducer producer = new NormalProducer(bootstrapServers, topic,
-                    0, 10, TimeUnit.MICROSECONDS,partitions, numberOfHosts);
+                    0, 1, TimeUnit.MICROSECONDS,partitions, numberOfHosts);
         } else {
             DDosProducer ddosProducer = new DDosProducer(bootstrapServers, topic,
-                    0,10, TimeUnit.MICROSECONDS, partitions, numberOfHosts);
+                    0,1, TimeUnit.MICROSECONDS, partitions, numberOfHosts);
         }
     }
 }
