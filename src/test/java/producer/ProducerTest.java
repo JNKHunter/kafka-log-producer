@@ -17,10 +17,10 @@ public class ProducerTest {
     @Before
     public void setUp() throws Exception {
         dDosProducer = new DDosProducer("0.0.0.0:9092", "topic",
-                0,1, TimeUnit.MICROSECONDS, 1, 5);
+                0,1, TimeUnit.SECONDS, 5);
 
         normalProducer = new NormalProducer("0.0.0.0:9092", "topic",
-                0,1, TimeUnit.MICROSECONDS, 1, 5);
+                0,1, TimeUnit.SECONDS, 5);
     }
 
     @Test
@@ -28,8 +28,9 @@ public class ProducerTest {
         dDosProducer.generateKeyPair();
         int key = dDosProducer.getCurKey();
         String val = dDosProducer.getCurVal();
+        int partition = 0;
 
-        assertEquals(key + "," + val, dDosProducer.getKeyValPair());
+        assertEquals(partition + "," + key + "|" + val, dDosProducer.getKeyValPair(partition));
     }
 
     @Test
@@ -37,7 +38,8 @@ public class ProducerTest {
         normalProducer.generateKeyPair();
         int key = normalProducer.getCurKey();
         String val = normalProducer.getCurVal();
+        int partition = 0;
 
-        assertEquals(key + "," + val, normalProducer.getKeyValPair());
+        assertEquals(partition + "," + key + "|" + val, normalProducer.getKeyValPair(partition));
     }
 }

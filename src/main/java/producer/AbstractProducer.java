@@ -2,6 +2,7 @@ package producer;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.PartitionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +31,8 @@ public abstract class AbstractProducer {
     protected int numberOfHosts;
     protected int curKey;
     protected String curVal;
-    private int numberOfPartitions = 2;
-    private long counter = 0;
-    /*Used for shifting to the next partition. This will help load balance partitions and greatly reduce shuffling
-     */
-    private long shift = 10000;
+    private int numberOfPartitions = 1;
+    private int count = 0;
 
     /**
      * String bootstrapServers: ip and port number of kafka brokers
@@ -44,7 +42,7 @@ public abstract class AbstractProducer {
      * TimeUnit timeUnit: unit of time (seconds, milliseconds etc)
      */
     public AbstractProducer(String bootstrapServers, String topicName,
-                            int initialDelay, int period, TimeUnit timeUnit, int numberOfPartitions, int numberOfHosts) {
+                            int initialDelay, int period, TimeUnit timeUnit, int numberOfHosts) {
 
         this.topicName = topicName;
         this.bootstrapServers = bootstrapServers;
@@ -52,7 +50,6 @@ public abstract class AbstractProducer {
         this.timeUnit = timeUnit;
         this.period = period;
         this.numberOfHosts = numberOfHosts;
-        this.numberOfPartitions = numberOfPartitions;
 
         init();
         startExecutors();
@@ -68,8 +65,8 @@ public abstract class AbstractProducer {
         return curVal;
     }
 
-    public String getKeyValPair() {
-        return curKey + "," + curVal;
+    public String getKeyValPair(int partition) {
+        return partition + "," + curKey + "|" + curVal;
     }
 
     protected void startExecutors(){
@@ -86,14 +83,15 @@ public abstract class AbstractProducer {
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
         producer = new KafkaProducer<>(props);
+        numberOfPartitions = producer.partitionsFor(topicName).size();
 
         runnable = () -> {
-            counter += 1;
-
+            count += 1;
             generateKeyPair();
+            int partitionKey = ((curKey + count) % numberOfPartitions);
             producer.send(new ProducerRecord<String, String>(topicName,
-                    curKey % numberOfPartitions, Integer.toString(curKey),
-                    getKeyValPair() ));
+                    partitionKey, Integer.toString(partitionKey),
+                    getKeyValPair(partitionKey)));
         };
     };
 
