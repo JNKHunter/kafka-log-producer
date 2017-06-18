@@ -23,7 +23,7 @@ public class DDosProducer extends AbstractProducer {
     @Override
     protected void init(){
         super.init();
-        numberOfZombies = 100;
+        numberOfZombies = 1000;
         botnetIps = new ArrayList<>();
         count = 1L;
         // Generate a number of botnet zombies
@@ -48,5 +48,4 @@ public class DDosProducer extends AbstractProducer {
             curVal = botnetIps.get(random.nextInt(numberOfZombies));
         }
     }
-
 }

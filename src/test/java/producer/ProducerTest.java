@@ -30,7 +30,7 @@ public class ProducerTest {
         String val = dDosProducer.getCurVal();
         int partition = 0;
 
-        assertEquals(partition + "," + key + "|" + val, dDosProducer.getKeyValPair(partition));
+        assertEquals(partition + "," + key + "," + val, dDosProducer.getKeyValPair(partition));
     }
 
     @Test
@@ -40,6 +40,6 @@ public class ProducerTest {
         String val = normalProducer.getCurVal();
         int partition = 0;
 
-        assertEquals(partition + "," + key + "|" + val, normalProducer.getKeyValPair(partition));
+        assertEquals(partition + "," + key + "," + val, normalProducer.getKeyValPair(partition));
     }
 }
