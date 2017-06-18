@@ -66,7 +66,7 @@ public abstract class AbstractProducer {
     }
 
     public String getKeyValPair(int partition) {
-        return partition + "," + curKey + "|" + curVal;
+        return partition + "," + curKey + "," + curVal;
     }
 
     protected void startExecutors(){
