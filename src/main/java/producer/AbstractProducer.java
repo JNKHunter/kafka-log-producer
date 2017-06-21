@@ -31,8 +31,10 @@ public abstract class AbstractProducer {
     protected int numberOfHosts;
     protected int curKey;
     protected String curVal;
+    protected String[] hostIps;
     private int numberOfPartitions = 1;
     private int count = 0;
+
 
     /**
      * String bootstrapServers: ip and port number of kafka brokers
@@ -84,6 +86,12 @@ public abstract class AbstractProducer {
 
         producer = new KafkaProducer<>(props);
         numberOfPartitions = producer.partitionsFor(topicName).size();
+
+        //Generate some hosts
+        hostIps = new String[numberOfHosts];
+        for(int i = 0; i < numberOfHosts; i++) {
+            hostIps[i] = getRandomIp();
+        }
 
         runnable = () -> {
             count += 1;
