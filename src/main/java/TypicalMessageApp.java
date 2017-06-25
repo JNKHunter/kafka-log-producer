@@ -1,6 +1,7 @@
 import producer.DDosProducer;
 import producer.NormalProducer;
 
+import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -10,18 +11,19 @@ import java.util.concurrent.TimeUnit;
  * arg[1]: topic name to send messages to
  */
 public class TypicalMessageApp {
+    protected  static ResourceBundle defaults = ResourceBundle.getBundle("Defaults");
+
     public static void main(String[] args) {
         String bootstrapServers;
         String topic;
-        //"normal" or "ddos". Will add proper DI, but this will do for now.
         String type;
         int numberOfHosts;
 
         if(args.length == 0) {
-            bootstrapServers = "0.0.0.0:9092";
-            topic = "logs";
-            type = "normal";
-            numberOfHosts = 4;
+            bootstrapServers = defaults.getString("defaults.boostrapServers");
+            topic = defaults.getString("defaults.topic");
+            type = defaults.getString("defaults.trafficType");
+            numberOfHosts = Integer.parseInt(defaults.getString("defaults.numberOfHosts"));
         }else{
             bootstrapServers = args[0];
             topic = args[1];
@@ -29,7 +31,7 @@ public class TypicalMessageApp {
             numberOfHosts = Integer.parseInt(args[3]);
         }
         
-        if(type.equals("normal")) {
+        if(type.equals(defaults.getString("defaults.trafficType"))) {
             NormalProducer producer = new NormalProducer(bootstrapServers, topic,
                     0, 1, TimeUnit.MICROSECONDS, numberOfHosts);
         } else {

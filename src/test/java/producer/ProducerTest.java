@@ -26,7 +26,7 @@ public class ProducerTest {
     @Test
     public void testDDosKeyValPair() {
         dDosProducer.generateKeyPair();
-        int key = dDosProducer.getCurKey();
+        String key = dDosProducer.hostIps[dDosProducer.getCurKey()];
         String val = dDosProducer.getCurVal();
         int partition = 0;
 
@@ -36,7 +36,7 @@ public class ProducerTest {
     @Test
     public void testNormalKeyValPair() {
         normalProducer.generateKeyPair();
-        int key = normalProducer.getCurKey();
+        String key = dDosProducer.hostIps[normalProducer.getCurKey()];
         String val = normalProducer.getCurVal();
         int partition = 0;
 

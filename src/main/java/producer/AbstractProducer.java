@@ -71,6 +71,10 @@ public abstract class AbstractProducer {
         return partition + "," + curKey + "," + curVal;
     }
 
+    public String getMessage(int partition) {
+        return partition + "," + hostIps[curKey] + "," + curVal;
+    }
+
     protected void startExecutors(){
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(this.runnable,this.initialDelay,this.period, this.timeUnit);
@@ -94,12 +98,15 @@ public abstract class AbstractProducer {
         }
 
         runnable = () -> {
+            if(count > 1000000000){
+                count = 0;
+            }
             count += 1;
             generateKeyPair();
             int partitionKey = ((curKey + count) % numberOfPartitions);
             producer.send(new ProducerRecord<String, String>(topicName,
                     partitionKey, Integer.toString(partitionKey),
-                    getKeyValPair(partitionKey)));
+                    getMessage(partitionKey)));
         };
     };
 
