@@ -6,9 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by John on 6/3/17.
- * App takes two command line args.
- * arg[0]: address and port # of Kafka bootstrapServers
- * arg[1]: topic name to send messages to
  */
 public class TypicalMessageApp {
     protected  static ResourceBundle defaults = ResourceBundle.getBundle("Defaults");

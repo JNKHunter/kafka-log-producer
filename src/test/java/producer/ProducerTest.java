@@ -11,8 +11,9 @@ import static org.junit.Assert.*;
  * Created by John on 6/12/17.
  */
 public class ProducerTest {
-    DDosProducer dDosProducer;
-    NormalProducer normalProducer;
+    private DDosProducer dDosProducer;
+    private NormalProducer normalProducer;
+    private int partition = 0;
 
     @Before
     public void setUp() throws Exception {
@@ -28,9 +29,8 @@ public class ProducerTest {
         dDosProducer.generateKeyPair();
         String key = dDosProducer.hostIps[dDosProducer.getCurKey()];
         String val = dDosProducer.getCurVal();
-        int partition = 0;
 
-        assertEquals(partition + "," + key + "," + val, dDosProducer.getKeyValPair(partition));
+        assertEquals(partition + "," + key + "," + val, dDosProducer.getMessage(partition));
     }
 
     @Test
@@ -38,8 +38,7 @@ public class ProducerTest {
         normalProducer.generateKeyPair();
         String key = dDosProducer.hostIps[normalProducer.getCurKey()];
         String val = normalProducer.getCurVal();
-        int partition = 0;
 
-        assertEquals(partition + "," + key + "," + val, normalProducer.getKeyValPair(partition));
+        assertEquals(partition + "," + key + "," + val, normalProducer.getMessage(partition));
     }
 }

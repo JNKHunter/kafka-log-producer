@@ -70,10 +70,6 @@ public abstract class AbstractProducer {
         return curVal;
     }
 
-    public String getKeyValPair(int partition) {
-        return partition + "," + curKey + "," + curVal;
-    }
-
     public String getMessage(int partition) {
         return partition + "," + hostIps[curKey] + "," + curVal;
     }
