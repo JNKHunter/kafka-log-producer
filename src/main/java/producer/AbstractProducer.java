@@ -14,10 +14,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by John on 5/28/17.
- * TODO: Generation should not be the concern of this class.
- * Possibly break the generation functionality out to another class.
  */
 public abstract class AbstractProducer {
+
+    //Avoid int overflow
+    private final int COUNTER_MAX = 1000000000;
+    private final int IP_V4_BOUND = 256;
+    private final int DEFAULT_PARTITIONS = 1;
 
     private String topicName;
     private String bootstrapServers;
@@ -32,7 +35,7 @@ public abstract class AbstractProducer {
     protected int curKey;
     protected String curVal;
     protected String[] hostIps;
-    private int numberOfPartitions = 1;
+    private int numberOfPartitions = DEFAULT_PARTITIONS;
     private int count = 0;
 
 
@@ -98,7 +101,7 @@ public abstract class AbstractProducer {
         }
 
         runnable = () -> {
-            if(count > 1000000000){
+            if(count > COUNTER_MAX){
                 count = 0;
             }
             count += 1;
@@ -111,10 +114,10 @@ public abstract class AbstractProducer {
     };
 
     protected String getRandomIp() {
-        return random.nextInt(256) + "." +
-                random.nextInt(256) + "." +
-                random.nextInt(256) + "." +
-                random.nextInt(256);
+        return random.nextInt(IP_V4_BOUND) + "." +
+                random.nextInt(IP_V4_BOUND) + "." +
+                random.nextInt(IP_V4_BOUND) + "." +
+                random.nextInt(IP_V4_BOUND);
     }
 
     protected int getRandomHost() {

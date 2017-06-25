@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit;
 public class DDosProducer extends AbstractProducer {
 
 
-    private int numberOfZombies;
+    private final int NUMBER_OF_ZOMBIES = 1000;
+    private final int ATTACK_HOST = 0;
     private List<String> botnetIps;
     private Long count;
 
@@ -23,11 +24,10 @@ public class DDosProducer extends AbstractProducer {
     @Override
     protected void init(){
         super.init();
-        numberOfZombies = 1000;
         botnetIps = new ArrayList<>();
         count = 1L;
         // Generate a number of botnet zombies
-        for(int i = 0; i < numberOfZombies; i++) {
+        for(int i = 0; i < NUMBER_OF_ZOMBIES; i++) {
             StringBuilder builder = new StringBuilder();
             builder.append(getRandomIp());
             botnetIps.add(builder.toString());
@@ -37,15 +37,15 @@ public class DDosProducer extends AbstractProducer {
     @Override
     protected void generateKeyPair() {
         count += 1;
-        if(count % numberOfZombies == 0) {
+        if(count % NUMBER_OF_ZOMBIES == 0) {
             //Create a random IP simulating a normal request.
             curKey = getRandomHost();
             curVal =  getRandomIp();
         } else {
-            //First host is getting ddos'd
-            curKey = 0;
+            //Simulation of first host under attack
+            curKey = ATTACK_HOST;
             //Choose a ip randomly from the zombie list
-            curVal = botnetIps.get(random.nextInt(numberOfZombies));
+            curVal = botnetIps.get(random.nextInt(NUMBER_OF_ZOMBIES));
         }
     }
 }
